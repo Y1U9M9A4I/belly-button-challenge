@@ -38,8 +38,15 @@ function buildMetadata(sample) {
 
     // Get the otu_ids, otu_labels, and sample_values
 
+    let otu_ids = samp.otu_ids
+    let otu_labels = samp.otu_labels
+    let sample_values = samp.sample_values
 
     // Build a Bubble Chart
+
+    function buildBubblePlot (sample) {
+      d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((dataset) => {
+    let samples = dataset.samples}
 
 
     // Render the Bubble Chart
@@ -53,14 +60,11 @@ function buildMetadata(sample) {
 
     function buildBarPlot (sample) {
       d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((dataset) => {
-
-    }
+      let samples = dataset.samples}
 
 
     // Render the Bar Chart
 
-  });
-}
 
 // Function to run on page load
 function init() {
@@ -68,20 +72,30 @@ function init() {
 
     // Get the names field
 
+    let sampname = dataset.names;
 
     // Use d3 to select the dropdown with id of `#selDataset`
-
+    let dropdownMenu = d3.select("#selDataset");
 
     // Use the list of sample names to populate the select options
+
+    d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+      let sampname = dataset.names;
+      });
     // Hint: Inside a loop, you will need to use d3 to append a new
     // option for each sample name.
 
+    
+
 
     // Get the first sample from the list
-
+      let first = sampname[0];
 
     // Build charts and metadata panel with the first sample
-
+      
+    buildBarPlot(first);
+    buildBubblePlot(first);
+    buildMetadata(first);
   });
 }
 
