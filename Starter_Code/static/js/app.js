@@ -28,7 +28,7 @@ function buildMetadata(sample) {
   });
 }
 
-// function to build both charts
+// function to build bubble chart
 function buildBubblePlot(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
@@ -79,7 +79,51 @@ function buildBubblePlot(sample) {
     // Render the Bar Chart
 
   });
-}
+};
+
+// function to build bar plot
+function buildBarPlot(sample) {
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+
+    // Get the samples field
+
+  let samples = data.samples;
+
+    // Filter the samples for the object with the desired sample number
+
+  let sampledata = samples.filter(sampleObj => sampleObj.id === sample)[0];
+
+    // Get the otu_ids, otu_labels, and sample_values
+
+  let otuids = sampledata.otu_ids; 
+  let otulabels = sampledata.otu_labels;
+  let sampvals = sampledata.sample_values;
+
+    // Build a Bar Plot
+  
+  let bardata = [{
+    x: otuids,
+    y: sampvals,
+    text: otulabels,
+    mode: 'markers',
+    marker: {
+      size: sampvals,
+      color: otuids,
+      colorscale: 'Earth'
+    }
+  }];
+
+  let barlayout = {
+    title: 'Bacteria Cultures Per Sample',
+    xaxis: { title: 'OTU ID'},
+    yaxis: { title: 'Number of Bacteria'}
+  };
+
+    // Render the Bubble Chart
+  Plotly.newPlot('bar', bardata, barlayout);
+
+});
+};
 
 // Function to run on page load
 function init() {
