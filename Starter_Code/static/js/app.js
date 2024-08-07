@@ -34,9 +34,6 @@ function buildCharts(sample) {
 
     // Get the samples field
 
-  let samples = data.samples;
-  let let samparr = samples.filter(results => results.id == sample);
-  let samp = samparr[0];
 
     // Filter the samples for the object with the desired sample number
 
