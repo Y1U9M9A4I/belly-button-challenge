@@ -34,7 +34,7 @@ function buildBubblePlot(sample) {
 
     // Get the samples field
 
-  let samples = data.samples;
+  const samples = data.samples;
 
     // Filter the samples for the object with the desired sample number
 
@@ -72,10 +72,6 @@ function buildBubblePlot(sample) {
   });
 };
 
-function dropdownChange() {
-  let selectedSample = d3.select('#selDataset').property('value');
-  buildBarPlot(selectedSample);
-}
 
 function initDropdown(samples) {
   let dropdownmenu = d3.select('#selDataset');
@@ -128,28 +124,38 @@ function buildBarPlot(sample) {
 }
 initDropdown();
 
+function dropdownChange() {
+  let selectedSample = d3.select('#selDataset').property('value');
+  buildBarPlot(selectedSample);
+}
 // Function to run on page load
 function init() {
-  let dropdownmenu = d3.select("selDataset")
-  if(samples && Array.isArray(samples) && samples.length > 0)
+  let dropdownmenu = d3.select("#selDataset");
+  if(samples && Array.isArray(samples) && samples.length > 0) {
     let choice = d3.select('#selDataset'); 
 
-  let firstsamp=samples[0]
-  let choice = d3.select('#selDataset');
-  samples.forEach(sample => {
-    choice.append('option').text(sample).property('value', sample);
-  });
+    samples.forEach(sample => {
+      choice.append('option').text(sample).property('value', sample);
+    });
 
-  let firstsamp = samples[0];
-  buildCharts(firstsamp);
-  buildMetadata(firstsamp);
+  // getting first sample from samples data 
+
+    let firstsamp = samples[0];
+
+  // build base chart and metadata panel 
+
+    buildCharts(firstsamp);
+    buildMetadata(firstsamp);
+  } else {
+    console.error("Invalid/Empty Samples Data");
+  }
 }
-
 // Function for event listener
 function optionChanged(newSample) {
   // Build charts and metadata panel each time a new sample is selected
-buildCharts(newSample);
-buildMetadata(newSample);
+  buildCharts(newSample);
+  buildMetadata(newSample);
 }
 
-// Initialize the dashboa
+// Initialize the dashboard
+init();
