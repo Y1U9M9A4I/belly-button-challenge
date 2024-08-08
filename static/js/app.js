@@ -1,4 +1,41 @@
 // Build the metadata panel
+
+let samples;
+function initDash() {
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
+    samples = data.samples;
+    
+    initDropdown(samples);
+    const firstsamp = samples[0];
+
+    buildCharts(firstsamp);
+    buildMetadata(firstsamp);
+
+    d3.select('#selDataset').on('change', dropdownChange);
+  }).catch((error) => {
+    console.error("Error loading JSON data:", error);
+  });
+}
+
+// function for run on page load 
+
+function init() {
+  let dropdownmenu = d3.select('#selDataset');
+  if (samples && Array.isArray(samples) && samples.length > 0) {
+    let choice = d3.select('#selDataset');
+
+    samples.forEach(sample => {
+      choice.append('option').text(sample.id).property('value', sample.id);
+    });
+
+    let firstsamp = samples [0];
+    buildCharts(firstsamp);
+    buildMetadata(firstsamp);
+  } else {
+    console.error("Invalid or empty samples data");
+  }
+}
+
 function buildMetadata(sample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
 
@@ -72,18 +109,13 @@ function buildBubblePlot(sample) {
   });
 };
 
-
-function initDropdown(samples) {
-  let dropdownmenu = d3.select('#selDataset');
-  if (samples && Array.isArray(samples) && samples.length > 0) {
-    samples.forEach(sample => {
-      dropdownmenu.append('option').text(sample.id).property('value', sample.id);
-  });
-  dropdownmenu.on('change', dropdownChange);
-} else {
-  console.error("Invalid or empty samples data");
+// Function for event listener
+function optionChanged(newSample) {
+  // Build charts and metadata panel each time a new sample is selected
+  buildCharts(newSample);
+  buildMetadata(newSample);
 }
-}
+initDash()
 
 // function to build bar plot
 function buildBarPlot(sample) {
@@ -129,33 +161,6 @@ function dropdownChange() {
   buildBarPlot(selectedSample);
 }
 // Function to run on page load
-function init() {
-  let dropdownmenu = d3.select("#selDataset");
-  if(samples && Array.isArray(samples) && samples.length > 0) {
-    let choice = d3.select('#selDataset'); 
-
-    samples.forEach(sample => {
-      choice.append('option').text(sample).property('value', sample);
-    });
-
-  // getting first sample from samples data 
-
-    let firstsamp = samples[0];
-
-  // build base chart and metadata panel 
-
-    buildCharts(firstsamp);
-    buildMetadata(firstsamp);
-  } else {
-    console.error("Invalid/Empty Samples Data");
-  }
-}
-// Function for event listener
-function optionChanged(newSample) {
-  // Build charts and metadata panel each time a new sample is selected
-  buildCharts(newSample);
-  buildMetadata(newSample);
-}
 
 // Initialize the dashboard
 init();
