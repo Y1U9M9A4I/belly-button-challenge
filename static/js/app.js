@@ -1,15 +1,11 @@
-// Build the metadata panel
-
-let samples;
-
 function buildMetadata(sample) {
   // Function logic for building metadata
-  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then(function(data){
-    // get the metadata field
+  d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then(function(data) {
+    // Get the metadata field
     let metadata = data.metadata;
 
     // Filter the metadata for the object with the desired sample number
-    let sampleMD = metadata.filter(result => result.id == sample)[0];
+    let sampleMD = metadata.find(result => result.id === sample);
 
     // Use d3 to select the panel with id of `#sample-metadata`
     let pan = d3.select("#sample-metadata");
@@ -21,60 +17,66 @@ function buildMetadata(sample) {
     Object.entries(sampleMD).forEach(([key, value]) => {
       pan.append("h6").text(`${key.toUpperCase()}: ${value}`);
     });
-        // Further processing of the data can be done here
-        console.log("Sample Values:", sampleValues);
-        console.log("OTU IDs:", otuIds);
-        console.log("OTU Labels:", otuLabels);
-    }).catch(function(error) {
-        // Handle any errors that may occur during fetching or parsing the data
-        console.error("Error fetching data:", error);
-    });
 
+    // Get sample values, OTU IDs, and OTU labels
+    let sampleValues = sampleMD.sample_values;
+    let otuIds = sampleMD.otu_ids;
+    let otuLabels = sampleMD.otu_labels;
+
+    // Log the data to the console for verification
+    console.log("Sample Values:", sampleValues);
+    console.log("OTU IDs:", otuIds);
+    console.log("OTU Labels:", otuLabels);
+
+    // Call the buildBubblePlot function with the sample ID
+    buildBubblePlot(sample);
+  }).catch(function(error) {
+    // Handle any errors that may occur during fetching or parsing the data
+    console.error("Error fetching metadata:", error);
+  });
 }
 
 function buildBubblePlot(sample) {
   // Function logic for building bubble plot
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then((data) => {
-
     // Get the samples field
-
-  const samples = data.samples;
+    let samples = data.samples;
 
     // Filter the samples for the object with the desired sample number
+    let sampledata = samples.find(sampleObj => sampleObj.id === sample);
 
-  let sampledata = samples.filter(sampleObj => sampleObj.id === sample)[0];
-
-    // Get the otu_ids, otu_labels, and sample_values
-
-  let otuids = sampledata.otu_ids; 
-  let otulabels = sampledata.otu_labels;
-  let sampvals = sampledata.sample_values;
+    // Get the OTU IDs, OTU labels, and sample values
+    let otuIds = sampledata.otu_ids;
+    let otuLabels = sampledata.otu_labels;
+    let sampleValues = sampledata.sample_values;
 
     // Build a Bubble Chart
-  
-  let bubdata = [{
-    x: otuids,
-    y: sampvals,
-    text: otulabels,
-    mode: 'markers',
-    marker: {
-      size: sampvals,
-      color: otuids,
-      colorscale: 'Earth'
-    }
-  }];
+    var bubdata = [{
+      x: otuIds,
+      y: sampleValues,
+      text: otuLabels,
+      mode: 'markers',
+      marker: {
+        size: sampleValues,
+        color: otuIds,
+        colorscale: 'Earth'
+      }
+    }];
 
-  let bublayout = {
-    title: 'Bacteria Cultures Per Sample',
-    xaxis: { title: 'OTU ID'},
-    yaxis: { title: 'Number of Bacteria'}
-  };
+    var bublayout = {
+      title: 'Bacteria Cultures Per Sample',
+      xaxis: { title: 'OTU ID' },
+      yaxis: { title: 'Number of Bacteria' }
+    };
 
     // Render the Bubble Chart
-  Plotly.newPlot('bubble', bubdata, bublayout);
-
+    Plotly.newPlot('myDiv', bubdata, bublayout);
+  }).catch(function(error) {
+    // Handle any errors that may occur during fetching or parsing the data
+    console.error("Error fetching sample data:", error);
   });
-};
+}
+
 
 function buildBarPlot(sample) {
   // Function logic for building bar plot
@@ -96,7 +98,7 @@ function buildBarPlot(sample) {
 
     // Build a Bar Plot
   
-  let bardata = [{
+  var bardata = [{
     x: sampvals,
     y: otuids.map(otuID => `OTU ${otuID}`),
     text: otulabels,
@@ -104,7 +106,7 @@ function buildBarPlot(sample) {
     orientation: 'h'
   }];
 
-  let barlayout = {
+  var barlayout = {
     title: 'Top 10 Bacteria Cultures Found',
     xaxis: { title: 'Number of Bacteria'},
     yaxis: { title: 'OTU ID'}
