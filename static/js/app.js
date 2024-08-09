@@ -1,4 +1,4 @@
-// fx to initialize dash
+// fx to initialize dash + order of code was reorgnanized to during troubleshooting w/ Xpert Learning Assistance for function
 function init() {
   // Read the samples.json file using D3
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then(data => {
@@ -59,7 +59,7 @@ function updateCharts(sample, metadata) {
 
   Plotly.newPlot("bubble", bubData, bubLayout);
 
-  // Display the sample metadata
+  // Display the sample metadata + assistance from Xpert Learning Assistance for working format
   var metadataPanel = d3.select("#sample-metadata");
   metadataPanel.html("");
   Object.entries(metadata).forEach(([key, value]) => {
@@ -67,7 +67,7 @@ function updateCharts(sample, metadata) {
   });
 }
 
-// Event listener for dropdown change
+// Event listener for dropdown change + assistance from Xpert Learning Assistance for working format & troubleshooting
 function optionChanged(selectedSample) {
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then(data => {
       var samples = data.samples;
@@ -81,3 +81,5 @@ function optionChanged(selectedSample) {
 
 // Initialize the dashboard
 init();
+
+// note: var worked better than "let"
