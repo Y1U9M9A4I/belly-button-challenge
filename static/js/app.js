@@ -1,4 +1,4 @@
-// Function to initialize the dashboard
+// fx to initialize dash
 function init() {
   // Read the samples.json file using D3
   d3.json("https://static.bc-edx.com/data/dl-1-2/m14/lms/starter/samples.json").then(data => {
@@ -38,7 +38,7 @@ function updateCharts(sample, metadata) {
   Plotly.newPlot("bar", barData, barLayout);
 
   // Create the bubble chart
-  var bubbleData = [{
+  var bubData = [{
       x: sample.otu_ids,
       y: sample.sample_values,
       text: sample.otu_labels,
@@ -50,13 +50,13 @@ function updateCharts(sample, metadata) {
       }
   }];
 
-  var bubbleLayout = {
+  var bubLayout = {
       title: "OTU Sample Values",
       xaxis: { title: "OTU ID" },
       yaxis: { title: "Sample Value" }
   };
 
-  Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+  Plotly.newPlot("bubble", bubData, bubLayout);
 
   // Display the sample metadata
   var metadataPanel = d3.select("#sample-metadata");
