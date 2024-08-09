@@ -32,7 +32,8 @@ function updateCharts(sample, metadata) {
   }];
 
   var barLayout = {
-      title: "Top 10 OTUs"
+      title: "Top 10 Bacteria Cultures Found",
+      xaxis: { title: "Number of Bacteria" },
   };
 
   Plotly.newPlot("bar", barData, barLayout);
@@ -51,9 +52,9 @@ function updateCharts(sample, metadata) {
   }];
 
   var bubLayout = {
-      title: "OTU Sample Values",
+      title: "Bacteria Cultures Per Sample",
       xaxis: { title: "OTU ID" },
-      yaxis: { title: "Sample Value" }
+      yaxis: { title: "Number of Bacteria" }
   };
 
   Plotly.newPlot("bubble", bubData, bubLayout);
